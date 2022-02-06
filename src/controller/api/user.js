@@ -3,43 +3,51 @@ const router = require("express").Router();
 const { User } = require("../../models/");
 
 // Get all users
-router.get("/", async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.json({ users });
-  } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .send({ msg: "Something went wrong while retrieving users." });
-  }
-});
+module.exports = {
+  async getUsers(req, res) {
+    try {
+      const users = await User.find({});
+      res.json({ users });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while retrieving users." });
+    }
+  },
 
-// Get one user
-router.get("/:id", async (req, res) => {
-  try {
-    const users = await User.find({ _id: req.params.id });
-    res.json({ users });
-  } catch (error) {
-    res
-      .status(500)
-      .send({ msg: "Something went wrong while retrieving the user." });
-  }
-});
+  // Get one user
+  async getSingleUser(req, res) {
+    try {
+      const user = await User.findOne({ _id: req.params.userId }).select(
+        "-__v"
+      );
+      if (!user) {
+        res.status(404).json({ msg: "No user with this ID." });
+      } else {
+        res.json(user);
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while retrieving the user." });
+    }
+  },
 
-// Create user
-router.post("/", async (req, res) => {
-  try {
-    const newUser = await User.create({
-      ...req.body,
-    });
-    res.json({ newUser, msg: "New user created" });
-  } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .send({ msg: "Something went wrong while creating the user." });
-  }
-});
+  // Create user
+  async createUser(req, res) {
+    try {
+      const newUser = await User.create({
+        ...req.body,
+      });
+      res.json({ newUser, msg: "New user created" });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while creating the user." });
+    }
+  },
+};
 
-module.exports = router;
+//module.exports = { getUsers, getSingleUser, createUser };

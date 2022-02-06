@@ -1,6 +1,11 @@
 const express = require("express");
+//const mongoose = require("mongoose");
+//const path = require("path");
+
+//const routes = require("./routes");
+const { User } = require("./models/User");
 const db = require("./config/connection");
-const routes = require("../src/controller");
+const routes = require("../src/routes");
 
 const app = express();
 
