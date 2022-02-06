@@ -3,8 +3,15 @@ const router = require("express").Router();
 const { User } = require("../../models/");
 
 router.get("/", async (req, res) => {
-  const users = await User.find({});
-  res.json({ users });
+  try {
+    const users = await User.find({});
+    res.json({ users });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ msg: "Something went wrong while creating the user." });
+  }
 });
 
 router.post("/", async (req, res) => {
@@ -15,7 +22,9 @@ router.post("/", async (req, res) => {
     res.json({ newUser, msg: "New user created" });
   } catch (error) {
     console.log(error);
-    res.status(500).send("Something went wrong while creating the user.");
+    res
+      .status(500)
+      .send({ msg: "Something went wrong while creating the user." });
   }
 });
 
