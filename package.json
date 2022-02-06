@@ -2,7 +2,7 @@
   "name": "social-network-api",
   "version": "1.0.1",
   "description": "Description",
-  "main": "srever.js",
+  "main": "server.js",
   "license": "MIT",
   "scripts": {
     "start": "node src/server.js",
