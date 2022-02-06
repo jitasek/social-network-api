@@ -2,8 +2,9 @@ const router = require("express").Router();
 
 const { User } = require("../../models/");
 
-router.get("/", (req, res) => {
-  res.json({ msg: "You will get a list of users" });
+router.get("/", async (req, res) => {
+  const users = await User.find({});
+  res.json({ users });
 });
 
 router.post("/", async (req, res) => {
