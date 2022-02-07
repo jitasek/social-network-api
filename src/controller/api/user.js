@@ -70,6 +70,23 @@ module.exports = {
         .send({ msg: "Something went wrong while updating the user." });
     }
   },
+
+  // Delete user - TO DO: remove user's thoughts and responses too
+  async deleteUser(req, res) {
+    try {
+      const user = await User.findOneAndRemove({ _id: req.params.userId });
+      if (!user) {
+        res.status(404).json({ msg: "No user with this ID." });
+      } else {
+        res.json({ msg: "User successfully deleted." });
+      }
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while deleting the user." });
+    }
+  },
 };
 
 //module.exports = { getUsers, getSingleUser, createUser };
