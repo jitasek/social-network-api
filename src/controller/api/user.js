@@ -22,6 +22,7 @@ module.exports = {
       const user = await User.findOne({ _id: req.params.userId }).select(
         "-__v"
       );
+      // .populate([{path: "thoughts", select: "-__v"}, {path: "friends", select: "-__v"}]);
       if (!user) {
         res.status(404).json({ msg: "No user with this ID." });
       } else {
@@ -71,7 +72,7 @@ module.exports = {
     }
   },
 
-  // Delete user - TO DO: remove user's thoughts and responses too
+  // Delete user - TO DO (bonus): remove user's thoughts and responses too
   async deleteUser(req, res) {
     try {
       const user = await User.findOneAndRemove({ _id: req.params.userId });
@@ -87,6 +88,28 @@ module.exports = {
         .send({ msg: "Something went wrong while deleting the user." });
     }
   },
-};
 
-//module.exports = { getUsers, getSingleUser, createUser };
+  // add a friend = update user adding a friend to them
+  async addFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { runValidators: true, new: true }
+      );
+      if (!user) {
+        res.status(404).json({ msg: "No user with this ID." });
+      } else {
+        res.json(user);
+      }
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while updating the user." });
+    }
+  },
+
+  // delete a friend = update user removing a friend of theirs
+  //async deleteFriend(req, res) {},
+};
