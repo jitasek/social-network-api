@@ -111,5 +111,23 @@ module.exports = {
   },
 
   // delete a friend = update user removing a friend of theirs
-  //async deleteFriend(req, res) {},
+  async removeFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
+      if (!user) {
+        res.status(404).json({ msg: "No user with this ID." });
+      } else {
+        res.json({ msg: "Friend successfully removed." });
+      }
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while deleting the user." });
+    }
+  },
 };
