@@ -1,4 +1,4 @@
-const router = require("express").Router();
+//const router = require("express").Router();
 
 const { User } = require("../../models/");
 
@@ -75,11 +75,23 @@ module.exports = {
   // Delete user - TO DO (bonus): remove user's thoughts and responses too
   async deleteUser(req, res) {
     try {
-      const user = await User.findOneAndRemove({ _id: req.params.userId });
-      if (!user) {
+      const deletedUser = await User.findOneAndDelete({
+        _id: req.params.userId,
+      });
+      if (!deletedUser) {
         res.status(404).json({ msg: "No user with this ID." });
       } else {
-        res.json({ msg: "User successfully deleted." });
+        // Delete this user from its friends
+        const user = await User.updateMany(
+          { _id: { $in: deletedUser.friends } },
+          { $pull: { friends: deletedUser._id } }
+        );
+        console.log(user);
+        if (!user) {
+          res.status(404).json({ msg: "No user with this ID." });
+        } else {
+          res.json({ msg: "Users successfully updated." });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -97,9 +109,16 @@ module.exports = {
         { $addToSet: { friends: req.params.friendId } },
         { runValidators: true, new: true }
       );
+
       if (!user) {
         res.status(404).json({ msg: "No user with this ID." });
       } else {
+        // Add the opposite connection as well
+        const user = await User.findOneAndUpdate(
+          { _id: req.params.friendId },
+          { $addToSet: { friends: req.params.userId } },
+          { runValidators: true, new: true }
+        );
         res.json(user);
       }
     } catch (error) {
