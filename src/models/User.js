@@ -21,12 +21,12 @@ const userSchema = new mongoose.Schema(
       trim: true,
       validate: [validateEmail, "Please fill in a valid email address. "],
     },
-    // thoughts: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Thought",
-    //   },
-    // ],
+    thoughts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Thought",
+      },
+    ],
     friends: [
       {
         type: mongoose.Schema.Types.ObjectId,
