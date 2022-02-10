@@ -79,4 +79,31 @@ module.exports = {
     }
   },
   // Delete thought
+  async deleteThought(req, res) {
+    try {
+      const deletedThought = await Thought.findOneAndDelete({
+        _id: req.params.thoughtId,
+      });
+      if (!deletedThought) {
+        res.status(404).json({ msg: "No thought with this ID." });
+      } else {
+        // Delete this thought from its user
+        const user = await User.updateOne(
+          { _id: req.params._id },
+          { $pull: { thoughts: deletedThought._id } }
+        );
+        console.log(user);
+        if (!user) {
+          res.status(404).json({ msg: "No user with this ID." });
+        } else {
+          res.json({ msg: "User also successfully updated." });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while deleting the thought." });
+    }
+  },
 };
