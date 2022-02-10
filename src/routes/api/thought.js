@@ -1,11 +1,11 @@
-const { Thought } = require("../../models/");
+const router = require("express").Router();
 
-// Get all thoughts
+const { getThoughts, createThought } = require("../../controller/api/thought");
 
-// Get one thought
+// thoughts
 
-// Create thought
+router.route("/").get(getThoughts).post(createThought);
 
-// Update thought
+// thoughts/:thoughtId/reactions
 
-// Delete thought
+module.exports = router;

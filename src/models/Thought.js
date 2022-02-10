@@ -20,7 +20,7 @@ const thoughtSchema = new mongoose.Schema(
       {
         type: String,
         required: true,
-        //trim: true,
+        trim: true,
       },
     ],
     //reactions: [reactionSchema],
@@ -36,12 +36,12 @@ const thoughtSchema = new mongoose.Schema(
 );
 
 // virtual property that retrieves the amount of reactoins per thought
-thoughtSchema
-  .virtual("reactionCount")
-  // Getter
-  .get(function () {
-    return this.reactions.length;
-  });
+// thoughtSchema
+//   .virtual("reactionCount")
+//   // Getter
+//   .get(function () {
+//     return this.reactions.length;
+//   });
 
 // Create model
 const Thought = mongoose.model("Thought", thoughtSchema);
