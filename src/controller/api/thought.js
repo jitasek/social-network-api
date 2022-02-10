@@ -58,5 +58,25 @@ module.exports = {
     }
   },
   // Update thought
+  async updateThought(req, res) {
+    try {
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $set: req.body },
+        { new: true }
+      ).select("-__v");
+
+      if (!thought) {
+        res.status(404).json({ msg: "No thought with this ID." });
+      } else {
+        res.json(thought);
+      }
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while updating the thought." });
+    }
+  },
   // Delete thought
 };
