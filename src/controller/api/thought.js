@@ -42,8 +42,8 @@ module.exports = {
       });
       // Update user with their new thought
       const user = await User.findOneAndUpdate(
-        { _id: req.body.username },
-        { $push: { thoughts: newThought_id } },
+        { _id: req.body.userId },
+        { $push: { thoughts: newThought } },
         { new: true }
       );
       if (!user) {
@@ -54,7 +54,7 @@ module.exports = {
       console.log(error);
       res
         .status(500)
-        .send({ msg: "Something went wrong while creating the thought." });
+        .json({ msg: "Something went wrong while creating the thought." });
     }
   },
   // Update thought
@@ -81,24 +81,25 @@ module.exports = {
   // Delete thought
   async deleteThought(req, res) {
     try {
-      const deletedThought = await Thought.findOneAndDelete({
+      await Thought.deleteOne({
         _id: req.params.thoughtId,
       });
-      if (!deletedThought) {
-        res.status(404).json({ msg: "No thought with this ID." });
-      } else {
-        // Delete this thought from its user
-        const user = await User.updateOne(
-          { _id: req.params._id },
-          { $pull: { thoughts: deletedThought._id } }
-        );
-        console.log(user);
-        if (!user) {
-          res.status(404).json({ msg: "No user with this ID." });
-        } else {
-          res.json({ msg: "User also successfully updated." });
-        }
-      }
+      // if (!deletedThought) {
+      //   res.status(404).json({ msg: "No thought with this ID." });
+      // } else {
+      //   // Delete this thought from its user
+      //   const user = await User.updateOne(
+      //     { _id: req.params._id },
+      //     { $pull: { thoughts: deletedThought._id } }
+      //   );
+      //   console.log(user);
+      //   if (!user) {
+      //     res.status(404).json({ msg: "No user with this ID." });
+      //   } else {
+      //     res.json({ msg: "User also successfully updated." });
+      //   }
+      // }
+      res.status(200).json({ msg: "Successfully deleted thought." });
     } catch (error) {
       console.log(error);
       res

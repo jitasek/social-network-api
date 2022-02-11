@@ -19,6 +19,6 @@ router
   .put(updateThought)
   .delete(deleteThought);
 
-// thoughts/:thoughtId/reactions
+// thoughts/:thoughtId/reactions - TO DO
 
 module.exports = router;
