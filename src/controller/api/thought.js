@@ -1,4 +1,4 @@
-//const router = require("express").Router();
+const router = require("express").Router();
 
 const { Thought, User } = require("../../models/");
 
@@ -107,4 +107,28 @@ module.exports = {
         .send({ msg: "Something went wrong while deleting the thought." });
     }
   },
+
+  // REACTIONS
+
+  // Add reaction
+  async addReaction(req, res) {
+    try {
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $addToSet: { reactions: req.body } },
+        { new: true }
+      );
+      if (!thought) {
+        res.status(404).json({ msg: "No thought with this ID." });
+      }
+      res.json({ thought, msg: "New reaction added" });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while adding the reaction." });
+    }
+  },
+
+  // Delete reaction
 };
