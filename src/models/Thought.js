@@ -68,8 +68,8 @@ const thoughtSchema = new mongoose.Schema(
       virtuals: true,
       getters: true,
     },
-    id: false,
-    versionKey: false,
+    // id: false,
+    // versionKey: false,
   }
 );
 

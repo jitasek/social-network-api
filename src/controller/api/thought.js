@@ -34,7 +34,7 @@ module.exports = {
     }
   },
 
-  // Create thought - not working correctly at the moment
+  // Create thought
   async createThought(req, res) {
     try {
       const newThought = await Thought.create({
@@ -42,8 +42,9 @@ module.exports = {
       });
       // Update user with their new thought
       const user = await User.findOneAndUpdate(
-        { _id: req.body.userId },
-        { $push: { thoughts: newThought } },
+        { username: req.body.username },
+        { $addToSet: { thoughts: newThought } },
+        //{ $addToSet: { thoughts: newThought._id } },
         { new: true }
       );
       if (!user) {
@@ -78,27 +79,28 @@ module.exports = {
         .send({ msg: "Something went wrong while updating the thought." });
     }
   },
-  // Delete thought
+  // Delete thought - thought deletes, but doesn't get removed from user
   async deleteThought(req, res) {
     try {
-      await Thought.deleteOne({
+      const deletedThought = await Thought.findOneAndRemove({
         _id: req.params.thoughtId,
+        // _id: req.params.thoughtId,
       });
-      // if (!deletedThought) {
-      //   res.status(404).json({ msg: "No thought with this ID." });
-      // } else {
-      //   // Delete this thought from its user
-      //   const user = await User.updateOne(
-      //     { _id: req.params._id },
-      //     { $pull: { thoughts: deletedThought._id } }
-      //   );
-      //   console.log(user);
-      //   if (!user) {
-      //     res.status(404).json({ msg: "No user with this ID." });
-      //   } else {
-      //     res.json({ msg: "User also successfully updated." });
-      //   }
-      // }
+      if (!deletedThought) {
+        res.status(404).json({ msg: "No thought with this ID." });
+      } else {
+        // // Delete this thought from its user
+        // const user = await User.updateOne(
+        //   { _id: req.params._id },
+        //   { $pull: { thoughts: deletedThought._id } }
+        // );
+        // //console.log(user);
+        // if (!user) {
+        //   res.status(404).json({ msg: "No user with this ID." });
+        // } else {
+        //   res.json({ msg: "Thought deleted and user successfully updated." });
+        // }
+      }
       res.status(200).json({ msg: "Successfully deleted thought." });
     } catch (error) {
       console.log(error);
@@ -130,7 +132,7 @@ module.exports = {
     }
   },
 
-  // Delete reaction
+  // Delete reaction - doesn't get removed from thought and from single user
 
   async deleteReaction(req, res) {
     try {
