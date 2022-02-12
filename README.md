@@ -23,7 +23,7 @@ An API for a social network web app using Express.js, MongoDB and Mongoose.
 ## Project Link
 
 - project content on [Github](https://github.com/jitasek/social-network-api/tree/dev)
-- [walkthrough video - part 1](https://watch.screencastify.com/)
+- [walkthrough video - part 1: CRUD user](https://watch.screencastify.com/v/d8v6YOk3bM4eyH6r1I3h)
 - [walkthrough video - part 2](https://watch.screencastify.com/)
 
 <br>
