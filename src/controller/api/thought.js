@@ -131,4 +131,21 @@ module.exports = {
   },
 
   // Delete reaction
+
+  async deleteReaction(req, res) {
+    try {
+      await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { new: true }
+      );
+
+      res.status(200).json({ msg: "Successfully deleted reaction." });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ msg: "Something went wrong while deleting the reaction." });
+    }
+  },
 };

@@ -93,7 +93,7 @@ module.exports = {
         if (!user) {
           res.status(404).json({ msg: "No user with this ID." });
         } else {
-          res.json({ msg: "Users successfully updated." });
+          res.json({ msg: "User successfully deleted." });
         }
       }
     } catch (error) {
@@ -143,7 +143,13 @@ module.exports = {
       if (!user) {
         res.status(404).json({ msg: "No user with this ID." });
       } else {
-        res.json({ msg: "Friend successfully removed." });
+        // remove the opposite connection as well
+        const user = await User.findOneAndUpdate(
+          { _id: req.params.friendId },
+          { $pull: { friends: req.params.userId } },
+          { new: true }
+        );
+        res.json(user);
       }
     } catch (error) {
       console.log(error);
