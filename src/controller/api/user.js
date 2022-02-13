@@ -75,7 +75,7 @@ module.exports = {
     }
   },
 
-  // Delete user - TO DO (bonus): remove user's thoughts and responses too
+  // Delete user
   async deleteUser(req, res) {
     try {
       const deletedUser = await User.findOneAndDelete({
